@@ -219,7 +219,7 @@ int backgroundY[2] = {0, 0};
 bool unlockedGravities[4] = {true, false, false, false};
 
 void loadTex(PPU466 &ppu, Texture t, int ox, int oy) {
-    PPU466::Tile tile;
+    PPU466::Tile tile = PPU466::Tile();
     glm::uvec2 size;
     std::vector< glm::u8vec4 > data;
     load_png(t.file, &size, &data, LowerLeftOrigin);
