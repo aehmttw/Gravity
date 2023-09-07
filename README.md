@@ -39,3 +39,5 @@ the gravity to discover a new route.
 
 This game was built with [NEST](NEST.md).
 
+To play the game, you must run the game executable from the dist directory with the data folder. The executable for
+Mac OS is included in the repository.
