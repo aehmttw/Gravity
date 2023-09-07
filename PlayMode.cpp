@@ -799,17 +799,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
     {
         // up
         int upY = 16;
-        ppu.sprites[12].x = gravityOffX;
-        ppu.sprites[12].y = gravityOffY + upY;
+        ppu.sprites[12].x = (uint8_t) gravityOffX;
+        ppu.sprites[12].y = (uint8_t) (gravityOffY + upY);
         ppu.sprites[12].index = 48;
-        ppu.sprites[13].x = gravityOffX + tileOffset;
-        ppu.sprites[13].y = gravityOffY + upY;
+        ppu.sprites[13].x = (uint8_t) (gravityOffX + tileOffset);
+        ppu.sprites[13].y = (uint8_t) (gravityOffY + upY);
         ppu.sprites[13].index = 49;
-        ppu.sprites[14].x = gravityOffX;
-        ppu.sprites[14].y = gravityOffY + upY + tileOffset;
+        ppu.sprites[14].x = (uint8_t) gravityOffX;
+        ppu.sprites[14].y = (uint8_t) (gravityOffY + upY + tileOffset);
         ppu.sprites[14].index = 50;
-        ppu.sprites[15].x = gravityOffX + tileOffset;
-        ppu.sprites[15].y = gravityOffY + upY + tileOffset;
+        ppu.sprites[15].x = (uint8_t) (gravityOffX + tileOffset);
+        ppu.sprites[15].y = (uint8_t) (gravityOffY + upY + tileOffset);
         ppu.sprites[15].index = 51;
     }
     else
