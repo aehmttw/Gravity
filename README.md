@@ -1,5 +1,7 @@
 # Gravity
 
+This is a game for the Computer Game Programming class at Carnegie Mellon University (15-466), and is based on the starter code available here: https://github.com/15-466/15-466-f23-base1
+
 Author: Matei Budiu
 
 Design: Gravity is a puzzle platformer with the game mechanic of collectible gravity tokens, enabling the player to change the direction of gravity to navigate a level.
