@@ -133,8 +133,8 @@ void updateSprite(Sprite s, PPU466 &ppu)
         y = 240;
     }
 
-    ppu.sprites[s.spriteId].x = x;
-    ppu.sprites[s.spriteId].y = y;
+    ppu.sprites[s.spriteId].x = (uint8_t) x;
+    ppu.sprites[s.spriteId].y = (uint8_t) y;
     ppu.sprites[s.spriteId].index = s.texture.id;
     ppu.sprites[s.spriteId].attributes = s.palette.id;
 }
@@ -306,33 +306,33 @@ struct GameMap
         }
     }
 
-    void setSky(PPU466 &ppu, uint8_t gravity)
+    void setSky(PPU466 &ppu, uint8_t grav)
     {
-        sky_palette_arrow = Palette(2, "sky_palettes.png", 2 * gravity, 0);
-        sky_palette_bg = Palette(3, "sky_palettes.png", 2 * gravity, 2);
+        sky_palette_arrow = Palette(2, "sky_palettes.png", 2 * grav, 0);
+        sky_palette_bg = Palette(3, "sky_palettes.png", 2 * grav, 2);
 
-        if (gravity == 0)
+        if (grav == 0)
         {
             sky[0].palette = sky_palette_arrow;
             sky[1].palette = sky_palette_arrow;
             sky[2].palette = sky_palette_bg;
             sky[3].palette = sky_palette_bg;
         }
-        else if (gravity == 1)
+        else if (grav == 1)
         {
             sky[0].palette = sky_palette_arrow;
             sky[1].palette = sky_palette_bg;
             sky[2].palette = sky_palette_arrow;
             sky[3].palette = sky_palette_bg;
         }
-        else if (gravity == 2)
+        else if (grav == 2)
         {
             sky[0].palette = sky_palette_bg;
             sky[1].palette = sky_palette_bg;
             sky[2].palette = sky_palette_arrow;
             sky[3].palette = sky_palette_arrow;
         }
-        else if (gravity == 3)
+        else if (grav == 3)
         {
             sky[0].palette = sky_palette_bg;
             sky[1].palette = sky_palette_arrow;
@@ -497,7 +497,7 @@ void PlayMode::die()
 }
 
 bool walking = false;
-float timeToSwitchSprite = 0.1;
+float timeToSwitchSprite = 0.1f;
 
 void PlayMode::update(float elapsed2) {
 	constexpr float speed = 60.0f;
@@ -506,7 +506,7 @@ void PlayMode::update(float elapsed2) {
 
     float vel = max(abs(player_vel.x), abs(player_vel.y)) * elapsed2 * 100;
 
-    int count = max(1, min(20, vel / 100));
+    int count = (int) max(1, min(20, vel / 100));
     for (int e = 0; e < count; e++)
     {
         float elapsed = elapsed2 / count;
@@ -611,7 +611,7 @@ void PlayMode::update(float elapsed2) {
                 player_at.y - (int) (ceil(player_at.y) / 8) * 8 < threshold)
             {
                 player_vel.y = min(player_vel.y, 0);
-                player_at.y = min(player_at.y, (int) (ceil(player_at.y) / 8) * 8);
+                player_at.y = min(player_at.y, (float) ((int) (ceil(player_at.y) / 8) * 8));
 
                 if (down.pressed)
                     player_vel.y = -jump_power;
@@ -676,8 +676,8 @@ void PlayMode::update(float elapsed2) {
         if (walking)
             timeToSwitchSprite -= elapsed;
 
-        if (timeToSwitchSprite < -0.1)
-            timeToSwitchSprite += 0.2;
+        if (timeToSwitchSprite < -0.1f)
+            timeToSwitchSprite += 0.2f;
     }
     //reset button press counters:
     left.downs = 0;
@@ -711,23 +711,23 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
     backgroundY[0] = ((-gridY + 1) / 2) * 2;
     backgroundY[1] = (-gridY / 2) * 2;
 
-    int extra = (timeToSwitchSprite < 0 && walking) ? 0 : 4;
+    uint8_t extra = (uint8_t) ((timeToSwitchSprite < 0 && walking) ? 0 : 4);
     //player sprite:
-	ppu.sprites[0].x = playerOffX;
-	ppu.sprites[0].y = playerOffY;
-	ppu.sprites[0].index = 32 + extra;
+	ppu.sprites[0].x = (uint8_t) playerOffX;
+	ppu.sprites[0].y = (uint8_t) playerOffY;
+	ppu.sprites[0].index = (uint8_t) (32 + extra);
 	ppu.sprites[0].attributes = 4;
-    ppu.sprites[1].x = playerOffX + 8;
-    ppu.sprites[1].y = playerOffY;
-    ppu.sprites[1].index = 33 + extra;
+    ppu.sprites[1].x = (uint8_t) (playerOffX + 8);
+    ppu.sprites[1].y = (uint8_t) playerOffY;
+    ppu.sprites[1].index = (uint8_t) (33 + extra);
     ppu.sprites[1].attributes = 4;
-    ppu.sprites[2].x = playerOffX;
-    ppu.sprites[2].y = playerOffY + 8;
-    ppu.sprites[2].index = 34 + extra;
+    ppu.sprites[2].x = (uint8_t) playerOffX;
+    ppu.sprites[2].y = (uint8_t) playerOffY + 8;
+    ppu.sprites[2].index = (uint8_t) (34 + extra);
     ppu.sprites[2].attributes = 4;
-    ppu.sprites[3].x = playerOffX + 8;
-    ppu.sprites[3].y = playerOffY + 8;
-    ppu.sprites[3].index = 35 + extra;
+    ppu.sprites[3].x = (uint8_t) (playerOffX + 8);
+    ppu.sprites[3].y = (uint8_t) (playerOffY + 8);
+    ppu.sprites[3].index = (uint8_t) (35 + extra);
     ppu.sprites[3].attributes = 4;
 
     int gravityOffX = 20;
@@ -749,17 +749,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
     {
         // down
         int downY = -16;
-        ppu.sprites[4].x = gravityOffX;
-        ppu.sprites[4].y = gravityOffY + downY;
+        ppu.sprites[4].x = (uint8_t) gravityOffX;
+        ppu.sprites[4].y = (uint8_t) (gravityOffY + downY);
         ppu.sprites[4].index = 40;
-        ppu.sprites[5].x = gravityOffX + tileOffset;
-        ppu.sprites[5].y = gravityOffY + downY;
+        ppu.sprites[5].x = (uint8_t) (gravityOffX + tileOffset);
+        ppu.sprites[5].y = (uint8_t) (gravityOffY + downY);
         ppu.sprites[5].index = 41;
-        ppu.sprites[6].x = gravityOffX;
-        ppu.sprites[6].y = gravityOffY + downY + tileOffset;
+        ppu.sprites[6].x = (uint8_t) gravityOffX;
+        ppu.sprites[6].y = (uint8_t) (gravityOffY + downY + tileOffset);
         ppu.sprites[6].index = 42;
-        ppu.sprites[7].x = gravityOffX + tileOffset;
-        ppu.sprites[7].y = gravityOffY + downY + tileOffset;
+        ppu.sprites[7].x = (uint8_t) (gravityOffX + tileOffset);
+        ppu.sprites[7].y = (uint8_t) (gravityOffY + downY + tileOffset);
         ppu.sprites[7].index = 43;
     }
     else
@@ -774,17 +774,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
     {
         // left
         int leftX = -16;
-        ppu.sprites[8].x = gravityOffX + leftX;
-        ppu.sprites[8].y = gravityOffY;
+        ppu.sprites[8].x = (uint8_t) (gravityOffX + leftX);
+        ppu.sprites[8].y = (uint8_t) gravityOffY;
         ppu.sprites[8].index = 44;
-        ppu.sprites[9].x = gravityOffX + tileOffset + leftX;
-        ppu.sprites[9].y = gravityOffY;
+        ppu.sprites[9].x = (uint8_t) (gravityOffX + tileOffset + leftX);
+        ppu.sprites[9].y = (uint8_t) gravityOffY;
         ppu.sprites[9].index = 45;
-        ppu.sprites[10].x = gravityOffX + leftX;
-        ppu.sprites[10].y = gravityOffY + tileOffset;
+        ppu.sprites[10].x = (uint8_t) (gravityOffX + leftX);
+        ppu.sprites[10].y = (uint8_t) (gravityOffY + tileOffset);
         ppu.sprites[10].index = 46;
-        ppu.sprites[11].x = gravityOffX + tileOffset + leftX;
-        ppu.sprites[11].y = gravityOffY + tileOffset;
+        ppu.sprites[11].x = (uint8_t) (gravityOffX + tileOffset + leftX);
+        ppu.sprites[11].y = (uint8_t) (gravityOffY + tileOffset);
         ppu.sprites[11].index = 47;
     }
     else
@@ -824,17 +824,17 @@ void PlayMode::draw(glm::uvec2 const &drawable_size) {
     {
         // right
         int rightX = 16;
-        ppu.sprites[16].x = gravityOffX + rightX;
-        ppu.sprites[16].y = gravityOffY;
+        ppu.sprites[16].x = (uint8_t) (gravityOffX + rightX);
+        ppu.sprites[16].y = (uint8_t) gravityOffY;
         ppu.sprites[16].index = 52;
-        ppu.sprites[17].x = gravityOffX + tileOffset + rightX;
-        ppu.sprites[17].y = gravityOffY;
+        ppu.sprites[17].x = (uint8_t) (gravityOffX + tileOffset + rightX);
+        ppu.sprites[17].y = (uint8_t) gravityOffY;
         ppu.sprites[17].index = 53;
-        ppu.sprites[18].x = gravityOffX + rightX;
-        ppu.sprites[18].y = gravityOffY + tileOffset;
+        ppu.sprites[18].x = (uint8_t) (gravityOffX + rightX);
+        ppu.sprites[18].y = (uint8_t) (gravityOffY + tileOffset);
         ppu.sprites[18].index = 54;
-        ppu.sprites[19].x = gravityOffX + tileOffset + rightX;
-        ppu.sprites[19].y = gravityOffY + tileOffset;
+        ppu.sprites[19].x = (uint8_t) (gravityOffX + tileOffset + rightX);
+        ppu.sprites[19].y = (uint8_t) (gravityOffY + tileOffset);
         ppu.sprites[19].index = 55;
     }
     else
